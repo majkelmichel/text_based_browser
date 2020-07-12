@@ -3,8 +3,10 @@ from sys import argv
 from collections import deque
 import requests
 from bs4 import BeautifulSoup
+from colorama import init, Fore
 
 args = argv
+init()
 
 if len(args) != 2:
     print("Wrong number of arguments")
@@ -63,7 +65,7 @@ while True:
         with open(path_with_dot, 'w', encoding='utf-8') as file:
             for tag in scraped:
                 file.write(tag.get_text())
-                print(tag.get_text())
+                print(Fore.BLUE + tag.get_text())
 
     else:
         print("error: wrong URL")
