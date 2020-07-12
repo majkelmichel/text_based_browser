@@ -60,8 +60,10 @@ while True:
         url = check_for_https(url)
         req = requests.get(url)
         scraped = get_text_from_page(req.content)
-        for tag in scraped:
-            print(tag.get_text())
+        with open(path_with_dot, 'w', encoding='utf-8') as file:
+            for tag in scraped:
+                file.write(tag.get_text())
+                print(tag.get_text())
 
     else:
         print("error: wrong URL")
