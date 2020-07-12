@@ -2,6 +2,7 @@ import os
 from sys import argv
 from collections import deque
 import requests
+from bs4 import BeautifulSoup
 
 args = argv
 
@@ -35,6 +36,12 @@ def check_for_https(url_string):
     return f'https://{url_string}'
 
 
+def get_text_from_page(page):
+    soup = BeautifulSoup(page, "html.parser")
+    tags_list = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'a', 'ul', 'ol', 'li']
+    return soup.find_all(tags_list)
+
+
 while True:
     url = input()
     path_no_dot = directory + "/" + url
@@ -52,8 +59,9 @@ while True:
         path_with_dot = directory + "/" + delete_dot(url)
         url = check_for_https(url)
         req = requests.get(url)
-        print(req.text)
-        with open(path_with_dot, 'w', encoding='utf-8') as file:
-            file.write(req.text)
+        scraped = get_text_from_page(req.content)
+        for tag in scraped:
+            print(tag.get_text())
+
     else:
         print("error: wrong URL")
